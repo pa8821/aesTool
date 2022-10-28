@@ -1,8 +1,6 @@
 import tkinter as tk   
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
-import os
-from turtle import bgcolor
 
 class GUI:
     def __init__(self,master):
@@ -19,70 +17,70 @@ class GUI:
         #Combo Boxes for selecting Mode and Input Data format
         ################################################################################
 
-        self.l1 = tk.Label(master,text="Mode:")
-        self.l1.grid(row = 1,column = 0)
+        self.lMode = tk.Label(master,text="Mode:")
+        self.lMode.grid(row = 1,column = 0)
 
-        self.combo = ttk.Combobox(master,values = ["ECB","CBC","OFB","CFB"])
-        self.combo.grid(row = 1,column =1,columnspan=2)
-        self.combo.current(0)
-        self.combo.bind("<<ComboboxSelected>>",self.selectMode)
+        self.comboMode = ttk.Combobox(master,values = ["ECB","CBC","OFB","CFB"])
+        self.comboMode.grid(row = 1,column =1,columnspan=2)
+        self.comboMode.current(0)
+        self.comboMode.bind("<<ComboboxSelected>>",self.selectMode)
 
-        self.l2 = tk.Label(master,text="Input Format")
-        self.l2.grid(row = 2,column = 0)
+        self.lInput = tk.Label(master,text="Input Format")
+        self.lInput.grid(row = 2,column = 0)
 
-        self.combo2 = ttk.Combobox(master,values = ["HEX","Text"])
-        self.combo2.grid(row = 2,column =1,columnspan=2)
-        self.combo2.current(0)
-        self.combo2.bind("<<ComboboxSelected>>",self.selectFormat)
+        self.comboInput = ttk.Combobox(master,values = ["HEX","Text"])
+        self.comboInput.grid(row = 2,column =1,columnspan=2)
+        self.comboInput.current(0)
+        self.comboInput.bind("<<ComboboxSelected>>",self.selectFormatInput)
 
-        self.l3 = tk.Label(master,text="Output Format")
-        self.l3.grid(row = 3,column = 0)
+        self.lOutput = tk.Label(master,text="Output Format")
+        self.lOutput.grid(row = 3,column = 0)
 
-        self.combo3 = ttk.Combobox(master,values = ["HEX","Text"])
-        self.combo3.grid(row = 3,column =1,columnspan=2)
-        self.combo3.current(0)
-        self.combo3.bind("<<ComboboxSelected>>",self.selectFormatOutput)
+        self.comboOutput = ttk.Combobox(master,values = ["HEX","Text"])
+        self.comboOutput.grid(row = 3,column =1,columnspan=2)
+        self.comboOutput.current(0)
+        self.comboOutput.bind("<<ComboboxSelected>>",self.selectFormatOutput)
 
-        self.l4 = tk.Label(master,text="Algorithm")
-        self.l4.grid(row = 0, column = 0)
+        self.lAlgorithm = tk.Label(master,text="Algorithm")
+        self.lAlgorithm.grid(row = 0, column = 0)
 
-        self.combo4 = ttk.Combobox(master,values = ["AES256","DES"])
-        self.combo4.grid(row = 0,column=1,columnspan=2)
-        self.combo4.current(0)
+        self.comboAlgorithm = ttk.Combobox(master,values = ["AES256","DES"])
+        self.comboAlgorithm.grid(row = 0,column=1,columnspan=2)
+        self.comboAlgorithm.current(0)
 
         ################################################################################
         #Buttons for Encrypt and Decrypt Functions/ Input File selection
         ################################################################################
 
         #Encrypt Button
-        self.enbutton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD")
-        self.enbutton.grid(row = 4,column=1)
+        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD")
+        self.encryptButton.grid(row = 4,column=1)
 
         #Decrypt Button
-        self.debutton = tk.Button(master,text="Decrypt",command=self.decryptButton, bg="#222222", fg="#DDDDDD")
-        self.debutton.grid(row = 4,column=2)
+        self.decryptButton = tk.Button(master,text="Decrypt",command=self.decryptButton, bg="#222222", fg="#DDDDDD")
+        self.decryptButton.grid(row = 4,column=2)
 
         #FileSelect Button
-        self.fFileSelect = tk.Button(master,text="Select Input File",command = self.selectFile)
-        self.fFileSelect.grid(row=4,column=0)
+        self.fileSelectButton = tk.Button(master,text="Select Input File",command = self.selectFile)
+        self.fileSelectButton.grid(row=4,column=0)
 
         #Show Current File
-        self.filedisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
-        self.filedisplay.grid(row=5,column=0)
+        self.fileDisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
+        self.fileDisplay.grid(row=5,column=0)
         
 
 
     #Cipher Mode Select and Set
     def selectMode(self,event):
-        self.Mode = self.combo.current()
+        self.Mode = self.comboMode.current()
        
     #Set input format variable
-    def selectFormat(self,event):
-        self.InputF = self.combo2.current()
+    def selectFormatInput(self,event):
+        self.InputF = self.comboInput.current()
 
     #Set input format variable
     def selectFormatOutput(self,event):
-        self.OutputF = self.combo3.current()
+        self.OutputF = self.comboOutput.current()
     
     #Encrypt
     def encryptButton(self):
