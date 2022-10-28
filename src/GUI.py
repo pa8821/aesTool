@@ -21,7 +21,7 @@ class GUI:
         self.lMode = tk.Label(master,text="Mode:")
         self.lMode.grid(row = 1,column = 0)
 
-        self.comboMode = ttk.Combobox(master,values = ["ECB","CBC","OFB","CFB"])
+        self.comboMode = ttk.Combobox(master,values = ["ECB","CBC"])
         self.comboMode.grid(row = 1,column =1,columnspan=2)
         self.comboMode.current(0)
         self.comboMode.bind("<<ComboboxSelected>>",self.selectMode)
