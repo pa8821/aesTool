@@ -1,6 +1,7 @@
 import tkinter as tk   
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
+import os
 
 class GUI:
     def __init__(self,master):
@@ -8,9 +9,9 @@ class GUI:
         self.master = master
         master.wm_title("AES256")
         self.fileName = "File.txt"                     
-        self.Mode = 0
-        self.InputF= 0
-        self.OutputF = 0
+        self.mode = 0
+        self.inputFormat= 0
+        self.outputFormat = 0
 
 
         ################################################################################
@@ -72,34 +73,34 @@ class GUI:
 
     #Cipher Mode Select and Set
     def selectMode(self,event):
-        self.Mode = self.comboMode.current()
+        self.mode = self.comboMode.current()
        
     #Set input format variable
     def selectFormatInput(self,event):
-        self.InputF = self.comboInput.current()
+        self.inputFormat = self.comboInput.current()
 
     #Set input format variable
     def selectFormatOutput(self,event):
-        self.OutputF = self.comboOutput.current()
+        self.outputFormat = self.comboOutput.current()
     
     #Encrypt
     def encryptButton(self):
         print("Encrypting...\n")
-        Top_Level.encrypt(self.fileName,self.Mode,self.InputF,self.OutputF)
+        Top_Level.encrypt(self.fileName,self.mode,self.InputF,self.OutputF)
         
     
     #Decrypt
     def decryptButton(self):
         print("Decrypting...\n")
-        Top_Level.decrypt(self.fileName,self.Mode,self.InputF,self.OutputF)
+        Top_Level.decrypt(self.fileName,self.mode,self.InputF,self.OutputF)
 
     #Set Selected File
     def selectFile(self):
         tempdir = askopenfilename(initialdir=os.getcwd(), title='Please select a directory')
         print(tempdir)
         self.fileName = tempdir
-        self.filedisplay.configure(text=self.fileName[-15:])
-        self.filedisplay.update()
+        self.fileDisplay.configure(text=self.fileName[-15:])
+        self.fileDisplay.update()
 
     def mainLoop(self):
         self.master.mainloop()
