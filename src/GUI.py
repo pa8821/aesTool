@@ -13,12 +13,11 @@ class GUI:
         self.inputFormat= 0
         self.outputFormat = 0
 
-
         ################################################################################
         #Combo Boxes for selecting Mode and Input Data format
         ################################################################################
 
-        self.lMode = tk.Label(master,text="Mode:")
+        self.lMode = tk.Label(master,text="Mode:", anchor= "w")
         self.lMode.grid(row = 1,column = 0)
 
         self.comboMode = ttk.Combobox(master,values = ["ECB","CBC"])
@@ -38,7 +37,7 @@ class GUI:
         self.lOutput.grid(row = 3,column = 0)
 
         self.comboOutput = ttk.Combobox(master,values = ["HEX","Text"])
-        self.comboOutput.grid(row = 3,column =1,columnspan=2)
+        self.comboOutput.grid(row = 3,column =1,columnspan=2, pady=(0,12))
         self.comboOutput.current(0)
         self.comboOutput.bind("<<ComboboxSelected>>",self.selectFormatOutput)
 
@@ -49,25 +48,35 @@ class GUI:
         self.comboAlgorithm.grid(row = 0,column=1,columnspan=2)
         self.comboAlgorithm.current(0)
 
+        self.lEntry = tk.Label(master,text="Input")
+        self.lEntry.grid(row = 5, column = 0)
+        self.plainEntry = tk.Entry(master)
+        self.plainEntry.grid(row=5, column = 1, columnspan=2)
+
+        self.lOutputLabel = tk.Label(master,text="Output")
+        self.lOutputLabel.grid(row = 6, column = 0)
+        self.outputDisplay = tk.Entry(master)
+        self.outputDisplay.grid(row=6, column = 1, columnspan=2)
+
         ################################################################################
         #Buttons for Encrypt and Decrypt Functions/ Input File selection
         ################################################################################
 
         #Encrypt Button
-        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD")
-        self.encryptButton.grid(row = 4,column=1)
+        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD", activebackground="#AA00AA")
+        self.encryptButton.grid(row = 7,column=1)
 
         #Decrypt Button
         self.decryptButton = tk.Button(master,text="Decrypt",command=self.decryptButton, bg="#222222", fg="#DDDDDD")
-        self.decryptButton.grid(row = 4,column=2)
+        self.decryptButton.grid(row = 7,column=2)
 
         #FileSelect Button
         self.fileSelectButton = tk.Button(master,text="Select Input File",command = self.selectFile)
-        self.fileSelectButton.grid(row=4,column=0)
+        self.fileSelectButton.grid(row=7,column=0)
 
         #Show Current File
         self.fileDisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
-        self.fileDisplay.grid(row=5,column=0)
+        self.fileDisplay.grid(row=8,column=0)
         
 
 
