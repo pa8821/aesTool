@@ -1,6 +1,7 @@
 import tkinter as tk   
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
+import MainEncryptDecrypt
 import os
 
 class GUI:
@@ -25,7 +26,7 @@ class GUI:
         self.comboMode.current(0)
         self.comboMode.bind("<<ComboboxSelected>>",self.selectMode)
 
-        self.lInput = tk.Label(master,text="Input Format")
+        self.lInput = tk.Label(master,text="Input Format:")
         self.lInput.grid(row = 2,column = 0)
 
         self.comboInput = ttk.Combobox(master,values = ["HEX","Text"])
@@ -33,7 +34,7 @@ class GUI:
         self.comboInput.current(0)
         self.comboInput.bind("<<ComboboxSelected>>",self.selectFormatInput)
 
-        self.lOutput = tk.Label(master,text="Output Format")
+        self.lOutput = tk.Label(master,text="Output Format:")
         self.lOutput.grid(row = 3,column = 0)
 
         self.comboOutput = ttk.Combobox(master,values = ["HEX","Text"])
@@ -41,22 +42,32 @@ class GUI:
         self.comboOutput.current(0)
         self.comboOutput.bind("<<ComboboxSelected>>",self.selectFormatOutput)
 
-        self.lAlgorithm = tk.Label(master,text="Algorithm")
+        self.lAlgorithm = tk.Label(master,text="Algorithm:")
         self.lAlgorithm.grid(row = 0, column = 0)
 
         self.comboAlgorithm = ttk.Combobox(master,values = ["AES256","DES"])
         self.comboAlgorithm.grid(row = 0,column=1,columnspan=2)
         self.comboAlgorithm.current(0)
 
-        self.lEntry = tk.Label(master,text="Input")
-        self.lEntry.grid(row = 5, column = 0)
-        self.plainEntry = tk.Entry(master)
-        self.plainEntry.grid(row=5, column = 1, columnspan=2)
+        self.lEntry = tk.Label(master,text="Input:")
+        self.lEntry.grid(row = 7, column = 0)
+        self.plainEntry = tk.Entry(master, width=50)
+        self.plainEntry.grid(row=7, column = 1, columnspan=2)
 
-        self.lOutputLabel = tk.Label(master,text="Output")
-        self.lOutputLabel.grid(row = 6, column = 0)
-        self.outputDisplay = tk.Entry(master)
-        self.outputDisplay.grid(row=6, column = 1, columnspan=2)
+        self.lOutputLabel = tk.Label(master,text="Output:")
+        self.lOutputLabel.grid(row = 8, column = 0)
+        self.outputDisplay = tk.Entry(master, width=50)
+        self.outputDisplay.grid(row=8, column = 1, columnspan=2)
+
+        self.lKey = tk.Label(master,text="Key:")
+        self.lKey.grid(row = 5, column = 0)
+        self.keyEntry = tk.Entry(master, width=50)
+        self.keyEntry.grid(row=5, column = 1, columnspan=2)
+
+        self.lIV = tk.Label(master,text="IV:")
+        self.lIV.grid(row = 6, column = 0)
+        self.IVEntry = tk.Entry(master, width=50)
+        self.IVEntry.grid(row=6, column = 1, columnspan=2)
 
         ################################################################################
         #Buttons for Encrypt and Decrypt Functions/ Input File selection
@@ -64,19 +75,19 @@ class GUI:
 
         #Encrypt Button
         self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD", activebackground="#AA00AA")
-        self.encryptButton.grid(row = 7,column=1)
+        self.encryptButton.grid(row = 9,column=1)
 
         #Decrypt Button
         self.decryptButton = tk.Button(master,text="Decrypt",command=self.decryptButton, bg="#222222", fg="#DDDDDD")
-        self.decryptButton.grid(row = 7,column=2)
+        self.decryptButton.grid(row = 9,column=2)
 
-        #FileSelect Button
-        self.fileSelectButton = tk.Button(master,text="Select Input File",command = self.selectFile)
-        self.fileSelectButton.grid(row=7,column=0)
+        # #FileSelect Button
+        # self.fileSelectButton = tk.Button(master,text="Select Input File",command = self.selectFile)
+        # self.fileSelectButton.grid(row=8,column=0)
 
-        #Show Current File
-        self.fileDisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
-        self.fileDisplay.grid(row=8,column=0)
+        # #Show Current File
+        # self.fileDisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
+        # self.fileDisplay.grid(row=9,column=0)
         
 
 
@@ -95,21 +106,26 @@ class GUI:
     #Encrypt
     def encryptButton(self):
         print("Encrypting...\n")
-        Top_Level.encrypt(self.fileName,self.mode,self.InputF,self.OutputF)
+        text = self.plainEntry.get()
+        key  = self.keyEntry.get()
+        iV   = self.IVEntry.get()
+        instance = MainEncryptDecrypt.Encrypt_Decrypt_Class()
+        output = instance.encrypt(text,key,iV)
+        self.outputDisplay.insert(0,output)
         
     
     #Decrypt
     def decryptButton(self):
         print("Decrypting...\n")
-        Top_Level.decrypt(self.fileName,self.mode,self.InputF,self.OutputF)
+        MainEncryptDecrypt.decrypt()
 
-    #Set Selected File
-    def selectFile(self):
-        tempdir = askopenfilename(initialdir=os.getcwd(), title='Please select a directory')
-        print(tempdir)
-        self.fileName = tempdir
-        self.fileDisplay.configure(text=self.fileName[-15:])
-        self.fileDisplay.update()
+    # #Set Selected File
+    # def selectFile(self):
+    #     tempdir = askopenfilename(initialdir=os.getcwd(), title='Please select a directory')
+    #     print(tempdir)
+    #     self.fileName = tempdir
+    #     self.fileDisplay.configure(text=self.fileName[-15:])
+    #     self.fileDisplay.update()
 
     def mainLoop(self):
         self.master.mainloop()
