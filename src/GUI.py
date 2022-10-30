@@ -2,17 +2,17 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
 import MainEncryptDecrypt
+from FormatEnum import *
 import os
 
 class GUI:
     def __init__(self,master):
 
         self.master = master
-        master.wm_title("AES256")
-        self.fileName = "File.txt"                     
-        self.mode = 0
-        self.inputFormat= 0
-        self.outputFormat = 0
+        master.wm_title("AES256")                   
+        self.mode = CipherMode.ECB
+        self.inputFormat= Format.hexadecimal
+        self.outputFormat = Format.hexadecimal
 
         ################################################################################
         #Combo Boxes for selecting Mode and Input Data format
@@ -74,7 +74,7 @@ class GUI:
         ################################################################################
 
         #Encrypt Button
-        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD", activebackground="#AA00AA")
+        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD", activebackground="#BB0099")
         self.encryptButton.grid(row = 9,column=1)
 
         #Decrypt Button
@@ -93,15 +93,18 @@ class GUI:
 
     #Cipher Mode Select and Set
     def selectMode(self,event):
-        self.mode = self.comboMode.current()
+        mode = self.comboMode.current()
+        self.mode = CipherMode.ECB if mode == 0 else CipherMode.CBC
        
     #Set input format variable
     def selectFormatInput(self,event):
-        self.inputFormat = self.comboInput.current()
+        selectedFormat = self.comboInput.current()
+        self.inputFormat = Format.hexadecimal if selectedFormat == 0 else Format.ascii
 
     #Set input format variable
     def selectFormatOutput(self,event):
-        self.outputFormat = self.comboOutput.current()
+        selectedFormat = self.comboOutput.current()
+        self.outputFormat = Format.hexadecimal if selectedFormat == 0 else Format.ascii
     
     #Encrypt
     def encryptButton(self):
@@ -110,7 +113,8 @@ class GUI:
         key  = self.keyEntry.get()
         iV   = self.IVEntry.get()
         instance = MainEncryptDecrypt.Encrypt_Decrypt_Class()
-        output = instance.encrypt(text,key,iV)
+        output = instance.encrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat)
+        self.outputDisplay.delete(0,len(self.outputDisplay.get()))
         self.outputDisplay.insert(0,output)
         
     
