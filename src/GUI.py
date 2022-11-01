@@ -77,11 +77,11 @@ class GUI:
         ################################################################################
 
         #Encrypt Button
-        self.encryptButton = tk.Button(master,text="Encrypt",command=partial(self.encryptDecryptCommon, True), bg="#222222", fg="#DDDDDD", activebackground="#BB0099")
+        self.encryptButton = tk.Button(master,text="Encrypt",width = 20, command=partial(self.encryptDecryptCommon, True), bg="#22EE80", fg="#000000", activebackground="#BB0099")
         self.encryptButton.grid(row = 9,column=1)
 
         #Decrypt Button
-        self.decryptButton = tk.Button(master,text="Decrypt",command=partial(self.encryptDecryptCommon, False), bg="#222222", fg="#DDDDDD")
+        self.decryptButton = tk.Button(master,text="Decrypt",width = 20, command=partial(self.encryptDecryptCommon, False), bg="#E80E80", fg="#DDDDDD")
         self.decryptButton.grid(row = 9,column=2)
         
 
@@ -108,6 +108,10 @@ class GUI:
 
         if((self.inputFormat == Format.hexadecimal and len(key) != 64) or (self.inputFormat == Format.ascii and len(key) != 32)):
             messagebox.showerror("Error", "Incorrect Key length. Key must be 32 Bytes")
+
+        if(len(text)==0):
+            messagebox.showerror("Error", "Input length must be at least 1 byte")
+
         else:
             instance = MainEncryptDecrypt.Encrypt_Decrypt_Class()
             output = instance.encrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat) if encrypt else instance.decrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat)
