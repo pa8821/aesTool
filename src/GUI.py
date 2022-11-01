@@ -1,8 +1,11 @@
+from distutils.log import error
 import tkinter as tk   
 import tkinter.ttk as ttk
 from tkinter.filedialog import *
+from tkinter import messagebox
 import MainEncryptDecrypt
 from FormatEnum import *
+from functools import partial
 import os
 
 class GUI:
@@ -74,20 +77,12 @@ class GUI:
         ################################################################################
 
         #Encrypt Button
-        self.encryptButton = tk.Button(master,text="Encrypt",command=self.encryptButton, bg="#222222", fg="#DDDDDD", activebackground="#BB0099")
+        self.encryptButton = tk.Button(master,text="Encrypt",command=partial(self.encryptDecryptCommon, True), bg="#222222", fg="#DDDDDD", activebackground="#BB0099")
         self.encryptButton.grid(row = 9,column=1)
 
         #Decrypt Button
-        self.decryptButton = tk.Button(master,text="Decrypt",command=self.decryptButton, bg="#222222", fg="#DDDDDD")
+        self.decryptButton = tk.Button(master,text="Decrypt",command=partial(self.encryptDecryptCommon, False), bg="#222222", fg="#DDDDDD")
         self.decryptButton.grid(row = 9,column=2)
-
-        # #FileSelect Button
-        # self.fileSelectButton = tk.Button(master,text="Select Input File",command = self.selectFile)
-        # self.fileSelectButton.grid(row=8,column=0)
-
-        # #Show Current File
-        # self.fileDisplay = tk.Label(master, text = self.fileName[-15:],wraplength=50)
-        # self.fileDisplay.grid(row=9,column=0)
         
 
 
@@ -105,31 +100,21 @@ class GUI:
     def selectFormatOutput(self,event):
         selectedFormat = self.comboOutput.current()
         self.outputFormat = Format.hexadecimal if selectedFormat == 0 else Format.ascii
-    
-    #Encrypt
-    def encryptButton(self):
-        print("Encrypting...\n")
+
+    def encryptDecryptCommon(self, encrypt=True):
         text = self.plainEntry.get()
         key  = self.keyEntry.get()
         iV   = self.IVEntry.get()
-        instance = MainEncryptDecrypt.Encrypt_Decrypt_Class()
-        output = instance.encrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat)
-        self.outputDisplay.delete(0,len(self.outputDisplay.get()))
-        self.outputDisplay.insert(0,output)
-        
-    
-    #Decrypt
-    def decryptButton(self):
-        print("Decrypting...\n")
-        MainEncryptDecrypt.decrypt()
 
-    # #Set Selected File
-    # def selectFile(self):
-    #     tempdir = askopenfilename(initialdir=os.getcwd(), title='Please select a directory')
-    #     print(tempdir)
-    #     self.fileName = tempdir
-    #     self.fileDisplay.configure(text=self.fileName[-15:])
-    #     self.fileDisplay.update()
+        if((self.inputFormat == Format.hexadecimal and len(key) != 64) or (self.inputFormat == Format.ascii and len(key) != 32)):
+            messagebox.showerror("Error", "Incorrect Key length. Key must be 32 Bytes")
+        else:
+            instance = MainEncryptDecrypt.Encrypt_Decrypt_Class()
+            output = instance.encrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat) if encrypt else instance.decrypt(text,key,iV, self.mode, self.inputFormat, self.outputFormat)
+            self.outputDisplay.delete(0,len(self.outputDisplay.get()))
+            self.outputDisplay.insert(0,output)
+
+
 
     def mainLoop(self):
         self.master.mainloop()

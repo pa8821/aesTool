@@ -24,6 +24,22 @@ class Encrypt_Decrypt_Class:
         print(Cipher)
         return Cipher
 
+    def decrypt(self,inputData, inputKey, inputIV, Mode=CipherMode.ECB,InputFormat=Format.hexadecimal,OutputFormat=Format.hexadecimal):
+        Data = self.stringToList(inputData, InputFormat)
+        Key  = self.stringToList(inputKey, InputFormat)
+        IV   = self.stringToList(inputIV, InputFormat)
+
+        if(Mode==CipherMode.ECB):
+            PT = EncryptionModes.ECBdecrypt(Data,Key)
+        elif(Mode==CipherMode.CBC):
+            PT = EncryptionModes.CBCdecrypt(Data,Key,IV)        
+                                                                            
+        txt = self.formatOutput(OutputFormat, PT)                                        #Format Cipher into Hex or Text based on OutputFormat. 
+        plaintext = ''.join(txt)
+        print(plaintext)
+        return plaintext
+
+
     #Take a string of input data and return a list of the bytes in that input data either in hex or ascii as indicated by inputFormat.
     def stringToList(self, string, inputFormat):
         if(inputFormat == Format.ascii):
